@@ -1,2 +1,6 @@
-g++ -Wall -o out/build.out src/main.cpp
-./out/build.out
+if cmake --build build; then
+	./build/Boids
+else
+	echo "Build Failed"
+	exit 1
+fi
