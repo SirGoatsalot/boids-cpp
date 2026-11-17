@@ -4,29 +4,51 @@
  * Author: Foster Sullivan (SirGoatsalot)
  */
 
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_render.h>
 #include <iostream>
 #include "boid.cpp"
 
 class Flock {
 private:
 	const int boid_count;
-	Boid * boids;
+	Boid* boids;
+
+	const float gradient = 300;
 public:
-	Flock(int boid_count) 
+	explicit Flock( int boid_count, SDL_Color color )
 	: boid_count{ boid_count <= 0 ? 1 : boid_count } // Safety barrier if <= 0 array length is passed
-	, boids{ new Boid[ boid_count ] } // 
+	, boids{ new Boid[ boid_count ] }
 	{
 		for (int i = 0; i < boid_count; ++i) {
-			boids[i].setPos(i, i);
-			boids[i].setID(i);
+			SDL_Color adjusted_color {color};
+			adjusted_color.r -= i * gradient;
+			adjusted_color.g -= i * gradient;
+			adjusted_color.b -= i * gradient;
+			boids[i].setColor(adjusted_color);
+			float x = (i * 25.0) + 50;
+			float y = (i * 25.0) + 50;
+			SDL_FPoint pos = SDL_FPoint{x, y};
+			boids[i].setPos(pos);
 		}
 	};
 
 	void listBoids() {
 		for (int i = 0; i < boid_count; ++i) {
-			int * pos = boids[i].getPos();
 			std::cout << "Boid " << boids[i].getID();
-			std::cout << " -- (" << pos[0] << ", " << pos[1] << ")\n";
 		}
 	}
+
+	void tick() {
+		for (int i = 0; i < boid_count; ++i) {
+			boids[i].tick();
+		}
+	}
+
+	void draw(SDL_Renderer *renderer) {
+		for (int i = 0; i < boid_count; ++i) {
+			boids[i].draw(renderer);
+		}	
+	}
+
 };

@@ -1,7 +1,9 @@
 #include "flock.cpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_messagebox.h>
+#include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_render.h>
+#include <vector>
 
 using namespace std;
 
@@ -15,6 +17,7 @@ void cleanup(SDL_State &state);
 int main() {
     SDL_State state;
 
+	// Check if SDL initialized correctly
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error Initializing SDL3", nullptr);
 		return 1;
@@ -24,6 +27,7 @@ int main() {
     int height = 800;
     state.window = SDL_CreateWindow("Boids", width, height, 0);
 
+	// Check if SDL Window initialized correctly
     if (!state.window) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", state.window);
         cleanup(state);
@@ -32,11 +36,15 @@ int main() {
 
     state.renderer = SDL_CreateRenderer(state.window, nullptr);
 
+	// Check if SDL Renderer intialized correctly
     if (!state.renderer) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating renderer", state.window);
         cleanup(state);
         return 1;
     }
+
+	SDL_Color color = SDL_Color{255, 0, 255, 255};
+	Flock flock{ 10, color };
 
     bool running = true;
     while (running) {
@@ -50,8 +58,11 @@ int main() {
             }
         }
 
-        SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(state.renderer);
+		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+		flock.draw(state.renderer);
 
         SDL_RenderPresent(state.renderer);
     }
