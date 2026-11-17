@@ -7,12 +7,14 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_stdinc.h>
-#include <iostream>
+
+#include"boid_util.cpp"
 
 class Boid {
 private:
-	int fov = 45;
+	float fov = 45;
 	float dir = 0;
+	float view_dist;
 	float scale = 25;
 	bool dbg = true;
 	int vertex_count = 3;
@@ -36,26 +38,11 @@ public:
 	void setScale(float scale) { this->scale = scale; }
 
 	void setPos(SDL_FPoint point) { 
-		if (dbg) {
-			// std::cout << log_msg() << "Position to " << point.x << ", " << point.y << "\n";
-		}
 		vertices[0].position = point;
-
-		vertices[1].position.x = point.x + (1 * scale);
-		vertices[1].position.y = point.y + (2 * scale);
-
-		vertices[2].position.x = point.x - (1 * scale);
-		vertices[2].position.y = point.y + (2 * scale);
+		boid_util::set_shape(vertices, vertex_count, scale);
 	}
 
 	void setColor(SDL_FColor color) { 
-		if (dbg) {
-			std::cout << log_msg() << "Color to "; 
-			std::cout << std::to_string(color.r) << ", ";
-			std::cout << std::to_string(color.g) << ", ";
-			std::cout << std::to_string(color.b) << "\n";
-		}
-		
 		for (int i = 0; i < vertex_count; ++i) {
 			vertices[i].color.r = color.r;
 			vertices[i].color.g = color.g;
@@ -64,24 +51,19 @@ public:
 		}
 	}
 
-
 	int getID() { return ID; }
 
 	void tick(double deltaTime) {
 		
 		float x = vertices[0].position.x + (speed[0] * deltaTime);
 		float y = vertices[0].position.x + (speed[1] * deltaTime);
+
 		setPos(SDL_FPoint{x, y});
 
 	};
 
 	void draw(SDL_Renderer* renderer) {
 		if (!SDL_RenderGeometry(renderer, nullptr, vertices, 3, nullptr, 0)) {
-			std::cout << log_msg() << SDL_GetError() << "\n";
 		}
 	};
-
-	std::string log_msg() {
-		return "Boid [" + std::to_string(ID) + "] - ";
-	}
 };

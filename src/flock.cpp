@@ -7,6 +7,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <iostream>
+
 #include "boid.cpp"
 
 class Flock {
@@ -37,12 +38,6 @@ public:
 			boids[i].setScale(50 - (i * 2));
 		}
 	};
-
-	void listBoids() {
-		for (int i = 0; i < boid_count; ++i) {
-			std::cout << "Boid " << boids[i].getID();
-		}
-	}
 
 	void tick(double deltaTime) {
 		for (int i = 0; i < boid_count; ++i) {
