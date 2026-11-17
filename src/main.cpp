@@ -43,7 +43,13 @@ int main() {
         return 1;
     }
 
-	SDL_Color color = SDL_Color{255, 0, 255, 255};
+	// Setup variables for delta-time calculation
+	// 		Used for Boid movement so machine performance doesn't impact the speed of the visualizer
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	double deltaTime = 0;
+
+	SDL_FColor color = SDL_FColor{0.5, 0, 0.5, 1};
 	Flock flock{ 10, color };
 
     bool running = true;
@@ -58,10 +64,17 @@ int main() {
             }
         }
 
+		
+		// Finalize calculations for delta-time
+	    LAST = NOW;
+	    NOW = SDL_GetPerformanceCounter();
+		deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
+
         SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(state.renderer);
 		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
+		flock.tick(deltaTime);
 		flock.draw(state.renderer);
 
         SDL_RenderPresent(state.renderer);

@@ -11,15 +11,15 @@
 
 class Boid {
 private:
-	int ID;
 	int fov = 45;
 	float dir = 0;
-	float scale = 50;
+	float scale = 25;
 	bool dbg = true;
-
 	int vertex_count = 3;
+	float speed[2] = {0.1, 0.1};
+
+	int ID;
 	SDL_Vertex* vertices;
-	SDL_Color color;
 	SDL_Renderer* renderer;
 public:
 	Boid( const Boid & other ); // Copy Constructor
@@ -27,7 +27,6 @@ public:
 
 	Boid( int ID = 0, SDL_FPoint pos = SDL_FPoint{0.0, 0.0}, SDL_Color color = SDL_Color{255, 255, 255, 255} ) 
 	: ID{ ID }
-	, color{ color }
 	, vertices{ new SDL_Vertex[vertex_count] }
 	{
 		setPos(pos);
@@ -38,7 +37,7 @@ public:
 
 	void setPos(SDL_FPoint point) { 
 		if (dbg) {
-			std::cout << log_msg() << "Position to " << point.x << ", " << point.y << "\n";
+			// std::cout << log_msg() << "Position to " << point.x << ", " << point.y << "\n";
 		}
 		vertices[0].position = point;
 
@@ -49,26 +48,30 @@ public:
 		vertices[2].position.y = point.y + (2 * scale);
 	}
 
-	void setColor(SDL_Color color) { 
+	void setColor(SDL_FColor color) { 
 		if (dbg) {
 			std::cout << log_msg() << "Color to "; 
 			std::cout << std::to_string(color.r) << ", ";
 			std::cout << std::to_string(color.g) << ", ";
 			std::cout << std::to_string(color.b) << "\n";
 		}
-		this->color = SDL_Color{color}; 
+		
 		for (int i = 0; i < vertex_count; ++i) {
-			vertices[i].color.r = this->color.r;
-			vertices[i].color.g = this->color.g;
-			vertices[i].color.b = this->color.b;
-			vertices[i].color.a = this->color.a;
+			vertices[i].color.r = color.r;
+			vertices[i].color.g = color.g;
+			vertices[i].color.b = color.b;
+			vertices[i].color.a = color.a;
 		}
 	}
 
 
 	int getID() { return ID; }
 
-	void tick() {
+	void tick(double deltaTime) {
+		
+		float x = vertices[0].position.x + (speed[0] * deltaTime);
+		float y = vertices[0].position.x + (speed[1] * deltaTime);
+		setPos(SDL_FPoint{x, y});
 
 	};
 
