@@ -8,6 +8,7 @@
 
 ### Implementation
 [ ] Exiting the program with `esc` and/or `q`
+[ ] Utility function to rotate the boid according to a dir angle
 
 ### Ideation
 [ ] Hammer out specifics of Ray Tracing algorithm to be used for Boid "sight" and collision detection

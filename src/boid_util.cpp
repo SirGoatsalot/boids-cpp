@@ -27,12 +27,23 @@ namespace boid_util {
 	 * @param vertex_count The number of vertices in vertices.
 	 * @param scale Scale to draw the triangle.
 	 */
-	void set_shape(SDL_Vertex* vertices, int vertex_count, float scale) {
+	void set_shape(SDL_Vertex* vertices, int vertex_count, float scale, float dir) {
 		vertices[1].position.x = vertices[0].position.x + (1 * scale);
 		vertices[1].position.y = vertices[0].position.y + (2 * scale);
 
 		vertices[2].position.x = vertices[0].position.x - (1 * scale);
 		vertices[2].position.y = vertices[0].position.y + (2 * scale);
+	}
+
+	/**
+	 * Rotates the given point about a given center by a given angle.
+	 *
+	 * @param center The center to rotate about
+	 * @param A the point to rotate
+	 * @param theta The angle to rotate by
+	 */
+	void rotate_point(SDL_FPoint& center, SDL_FPoint& a, float theta) {
+		
 	}
 }
 
