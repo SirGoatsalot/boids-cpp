@@ -8,17 +8,19 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_stdinc.h>
 
-#include"boid_util.cpp"
+#include "boid_util.h"
+#include "boid_util.cpp"
+
 
 class Boid {
 private:
 	float fov = 45;
-	float dir = 0;
+	float dir = 90;
 	float view_dist;
 	float scale = 25;
 	bool dbg = true;
 	int vertex_count = 3;
-	float speed[2] = {0.1, 0.1};
+	float speed[2] = {0, 0};
 
 	int ID;
 	SDL_Vertex* vertices;
@@ -39,7 +41,7 @@ public:
 
 	void setPos(SDL_FPoint point) { 
 		vertices[0].position = point;
-		boid_util::set_shape(vertices, vertex_count, scale);
+		boid_util::set_shape(vertices, vertex_count, scale, dir);
 	}
 
 	void setColor(SDL_FColor color) { 
@@ -58,12 +60,15 @@ public:
 		float x = vertices[0].position.x + (speed[0] * deltaTime);
 		float y = vertices[0].position.x + (speed[1] * deltaTime);
 
-		setPos(SDL_FPoint{x, y});
+		dir += 0.1 * deltaTime;
 
+		setPos(SDL_FPoint{x, y});
 	};
 
 	void draw(SDL_Renderer* renderer) {
 		if (!SDL_RenderGeometry(renderer, nullptr, vertices, 3, nullptr, 0)) {
+			std::string msg = SDL_GetError();
+			boid_util::log_msg(ID, msg);
 		}
 	};
 };

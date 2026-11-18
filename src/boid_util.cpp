@@ -1,49 +1,36 @@
-/*
- * Misc. utilities for use with the Boid class.
- *
- * Author: Foster Sullivan {SirGoatsalot}
- */
-
 #include <SDL3/SDL.h>
-
 #include <iostream>
+#include <cmath>
+#include <math.h>
+
+#include "boid_util.h"
 
 namespace boid_util {
-	/**
-	 * Log the given message to the given Boid ID.
-	 *
-	 * @param ID the ID of the boid logging.
-	 * @param msg the message to log.
-	 */
+
 	void log_msg(int ID, std::string& msg) {
 		std::cout << "Boid [" + std::to_string(ID) + "] - " << msg << "\n";
 	}
 
-	/** 
-	 * Adjust the given list of vertices to form a triangle shape relative to the first point, making the firsrt
-	 * point the tip of the triangle.
-	 *
-	 * @param veritces The list of vertices to adjust into a triangle.
-	 * @param vertex_count The number of vertices in vertices.
-	 * @param scale Scale to draw the triangle.
-	 */
 	void set_shape(SDL_Vertex* vertices, int vertex_count, float scale, float dir) {
-		vertices[1].position.x = vertices[0].position.x + (1 * scale);
-		vertices[1].position.y = vertices[0].position.y + (2 * scale);
+		const int width = 1;
+		const int height = 2;
 
-		vertices[2].position.x = vertices[0].position.x - (1 * scale);
-		vertices[2].position.y = vertices[0].position.y + (2 * scale);
+		vertices[1].position.x = vertices[0].position.x + (width * scale);
+		vertices[1].position.y = vertices[0].position.y + (height * scale);
+
+		vertices[2].position.x = vertices[0].position.x - (width * scale);
+		vertices[2].position.y = vertices[0].position.y + (height * scale);
+		
+		float angle_offset = 180 - 2 * (std::atan(height / width) * (180 / M_PI));
+
+		rotate_point(&vertices[0], vertices[1], dir);
+		rotate_point(&vertices[0], vertices[2], dir + angle_offset);
 	}
 
-	/**
-	 * Rotates the given point about a given center by a given angle.
-	 *
-	 * @param center The center to rotate about
-	 * @param A the point to rotate
-	 * @param theta The angle to rotate by
-	 */
-	void rotate_point(SDL_FPoint& center, SDL_FPoint& a, float theta) {
-		
+	void rotate_point(SDL_Vertex* center, SDL_Vertex& a, float theta) {
+		float r = std::sqrt(std::pow(center->position.x - a.position.x, 2) + std::pow(center->position.y - a.position.y, 2));
+		a.position.x = center->position.x + (r * std::cos(theta * (M_PI / 180)));
+		a.position.y = center->position.y + (r * std::sin(theta * (M_PI / 180)));
 	}
 }
 

@@ -63,7 +63,6 @@ int main() {
                 }
             }
         }
-
 		
 		// Finalize calculations for delta-time
 	    LAST = NOW;
