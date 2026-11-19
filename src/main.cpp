@@ -49,6 +49,12 @@ int main() {
 	Uint64 LAST = 0;
 	double deltaTime = 0;
 
+	// Setup variable for framerate cap calculation?
+	// #TODO Kinda janky solution, see if there is a better one someone smarter than me came up with
+	float deltaTick = 0.0;
+	const int framerate = 120; // framerate in frames / Second
+	const float msPerFrame = (1.0 / framerate) * 1000; // Convert into ms / frame
+
 	SDL_FColor color = SDL_FColor{0.5, 0, 0.5, 1};
 	Flock flock{ 10, color };
 
@@ -69,14 +75,22 @@ int main() {
 	    NOW = SDL_GetPerformanceCounter();
 		deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
 
-        SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(state.renderer);
-		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
 		flock.tick(deltaTime);
-		flock.draw(state.renderer);
 
-        SDL_RenderPresent(state.renderer);
+		// TODO second part of Janky framerate solution (see line 53) 
+		deltaTick += deltaTime;
+		if (deltaTick > msPerFrame) { 	
+			deltaTick = 0;
+
+        	SDL_SetRenderDrawColor(state.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        	SDL_RenderClear(state.renderer);
+			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+			flock.draw(state.renderer);
+
+        	SDL_RenderPresent(state.renderer);
+
+		}
     }
 
     cleanup(state);
