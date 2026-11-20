@@ -1,9 +1,3 @@
-/*
- * Class that manages a group of "Boids", spawning and drawing each one.
- *
- * Author: Foster Sullivan (SirGoatsalot)
- */
-
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 

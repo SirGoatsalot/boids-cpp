@@ -1,16 +1,7 @@
-/*
- * Class representing one Boid which sees its neighbors and moves accordingly.
- *
- * Author: Foster Sullivan (SirGoatsalot)
- *
- */
-
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_stdinc.h>
 
-#include "boid_util.h"
 #include "boid_util.cpp"
-
 
 class Boid {
 private:
@@ -38,12 +29,6 @@ public:
 
 	void setID(int ID) { this->ID = ID; } 
 	void setScale(float scale) { this->scale = scale; }
-
-	void setPos(SDL_FPoint point) { 
-		vertices[0].position = point;
-		boid_util::set_shape(vertices, vertex_count, scale, dir);
-	}
-
 	void setColor(SDL_FColor color) { 
 		for (int i = 0; i < vertex_count; ++i) {
 			vertices[i].color.r = color.r;
@@ -53,13 +38,18 @@ public:
 		}
 	}
 
+	void setPos(SDL_FPoint point) { 
+		vertices[0].position = point;
+		boid_util::set_shape(vertices, vertex_count, scale, dir);
+	}
+
 	int getID() { return ID; }
+	SDL_Vertex getPos() { return *vertices; }
 
 	void tick(double deltaTime) {
 		
 		float x = vertices[0].position.x + (speed[0] * deltaTime);
 		float y = vertices[0].position.x + (speed[1] * deltaTime);
-
 		dir += 0.1 * deltaTime;
 
 		setPos(SDL_FPoint{x, y});

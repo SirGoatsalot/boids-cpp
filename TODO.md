@@ -2,6 +2,7 @@
 
 
 ### Housekeeping
+[~] oog
 [~] Document methods in `boid.cpp`, `flock.cpp`, and `boid_util.cpp`
 [~] Look into proper header formatting/style (specifically for `boid_util.cpp`)
 [~] Write header files?

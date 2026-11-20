@@ -5,8 +5,6 @@
 
 #include "flock.cpp"
 
-using namespace std;
-
 struct SDL_State {
     SDL_Window *window;
     SDL_Renderer *renderer;

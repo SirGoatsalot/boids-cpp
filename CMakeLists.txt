@@ -4,7 +4,6 @@ project(Boids)
 
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 
-
 add_executable(Boids)
 
 target_sources(Boids
