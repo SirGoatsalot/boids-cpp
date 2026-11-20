@@ -8,6 +8,7 @@ namespace boid_util {
 	void log_msg(int ID, std::string& msg) {
 		std::cout << "Boid [" + std::to_string(ID) + "] - " << msg << "\n";
 	}
+
 	void rotate_point(SDL_Vertex* center, SDL_Vertex& a, float theta) {
 		float r = std::sqrt(
 			std::pow(center->position.x - a.position.x, 2) + 
@@ -16,6 +17,7 @@ namespace boid_util {
 		a.position.x = center->position.x + (r * std::cos(theta * (M_PI / 180)));
 		a.position.y = center->position.y + (r * std::sin(theta * (M_PI / 180)));
 	}
+
 	void set_shape(SDL_Vertex* vertices, int vertex_count, float scale, float dir) {
 		const int width = 1;
 		const int height = 2;
@@ -28,10 +30,13 @@ namespace boid_util {
 		
 		float angle_offset = 180 - 2 * (std::atan(height / width) * (180 / M_PI));
 
-		rotate_point(&vertices[0], vertices[1], dir);
-		rotate_point(&vertices[0], vertices[2], dir + angle_offset);
+		rotate_point(&vertices[0], vertices[1], dir - (angle_offset / 2));
+		rotate_point(&vertices[0], vertices[2], dir + (angle_offset / 2));
 	}
 
-	
+	void move_head(SDL_Vertex* vertices, int vertex_count, float dir, float speed) {
+		vertices[0].position.x += speed * std::cos((dir - 180) * (M_PI / 180));
+		vertices[0].position.y += speed * std::sin((dir - 180) * (M_PI / 180));
+	}
 }
 

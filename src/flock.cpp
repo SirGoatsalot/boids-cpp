@@ -8,7 +8,7 @@ private:
 	const int boid_count;
 	Boid* boids;
 
-	const float gradient = 0.01;
+	const float gradient = 0.002;
 public:
 	explicit Flock( int boid_count, SDL_FColor color )
 	: boid_count{ boid_count <= 0 ? 1 : boid_count } // Safety barrier if <= 0 array length is passed
@@ -23,12 +23,13 @@ public:
 			
 			boids[i].setColor(SDL_FColor(adjusted_color));
 
-			float x = (i * 25.0) + 50;
-			float y = (i * 25.0) + 50;
+			// float x = (i * 25.0) + 50;
+			// float y = (i * 25.0) + 50;
+			float x = (i * 20) + 20;
+			float y = (i * 20) + 20;
 			SDL_FPoint pos = SDL_FPoint{x, y};
+			boids[i].setDir(10 * i);
 			boids[i].setPos(pos);
-
-			boids[i].setScale(50 - (i * 2));
 		}
 	};
 

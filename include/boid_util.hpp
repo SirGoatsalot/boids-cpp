@@ -39,6 +39,16 @@ namespace boid_util {
 	 * @param theta The angle to rotate the point by.
 	 */
 	void rotate_point(SDL_Vertex* center, SDL_Vertex& a, float theta); 
+
+	/**
+	 * Moves the given points by a vector of magnitude speed and direction dir
+	 *
+	 * @param[in/out] vertices
+	 * @param[in] vertex_count
+	 * @param[in] dir
+	 * @param[in] speed
+	 */
+	void move_points(SDL_Vertex* vertices, int vertex_count, float dir, float speed);
 }
 
 #endif

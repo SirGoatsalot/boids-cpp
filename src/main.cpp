@@ -50,11 +50,11 @@ int main() {
 	// Setup variable for framerate cap calculation?
 	// #TODO Kinda janky solution, see if there is a better one someone smarter than me came up with
 	float deltaTick = 0.0;
-	const int framerate = 120; // framerate in frames / Second
+	const int framerate = 30; // framerate in frames / Second
 	const float msPerFrame = (1.0 / framerate) * 1000; // Convert into ms / frame
 
 	SDL_FColor color = SDL_FColor{0.5, 0, 0.5, 1};
-	Flock flock{ 10, color };
+	Flock flock{ 36, color };
 
     bool running = true;
     while (running) {
